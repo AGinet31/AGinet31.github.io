@@ -1,0 +1,2085 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>Les collèges en Haute-Garonne</title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/proj4.js"></script>
+        <script src="js/proj4leaflet.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/Secteurscollges_0.js"></script>
+        <script src="data/Dpartement_Haute_Garonne_1.js"></script>
+        <script src="data/Communes_2.js"></script>
+        <script src="data/Mtropole_3.js"></script>
+        <script src="data/Toulouse_4.js"></script>
+        <script src="data/Collgesprivs_5.js"></script>
+        <script src="data/Collgesprogramms_6.js"></script>
+        <script src="data/Collgepublics_7.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+            highlightLayer.openPopup();
+        }
+        var crs = new L.Proj.CRS('EPSG:2154', '+proj=lcc +lat_0=46.5 +lon_0=3 +lat_1=49 +lat_2=44 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', {
+            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
+        });
+        var map = L.map('map', {
+            crs: crs,
+            continuousWorld: false,
+            worldCopyJump: false, 
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+            map.setMaxBounds(map.getBounds());
+        }
+        function pop_Secteurscollges_0(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Secteur collège :</strong><br />' + (feature.properties['nom'] !== null ? autolinker.link(feature.properties['nom'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Secteurscollges_0_0(feature) {
+            switch(String(feature.properties['q2wHide_Couleur'])) {
+                case '#000000':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(81,204,196,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#000097':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(117,219,106,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#001be9':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,174,51,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#00801b':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(222,117,125,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#008c09':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(128,178,218,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#00b832':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(110,232,208,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#0c50ce':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(103,100,202,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#0fcda7':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(170,213,50,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#12e92f':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(222,29,123,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#1313ab':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(70,228,136,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#1395c8':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,69,171,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#174ed9':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(46,109,218,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#1aec5c':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(63,202,77,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#1cdfe9':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(63,202,77,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#1e00d8':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(91,239,190,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#1ea291':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(116,106,231,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#208e2b':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(73,205,21,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#2135ec':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(67,233,125,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#2241da':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(222,74,163,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#305832':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(222,100,87,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#31d04f':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(25,184,237,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#32a4e1':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(213,136,225,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#37d2e3':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(211,222,58,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#3dac80':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(225,67,35,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#424242':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(210,125,128,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#43da2f':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(155,208,41,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#46886a':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(155,208,41,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#4be7c0':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(47,122,201,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#4e742b':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(67,84,232,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#58e10f':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(152,232,53,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#636830':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(181,16,222,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#646464':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(68,173,221,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#66b8c8':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(121,38,238,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#675dd1':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(229,229,20,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#6ade6c':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(95,117,228,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#6d241e':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(205,199,107,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#6e72ed':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(108,205,168,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#70ce77':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(47,226,40,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#717171':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,81,236,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#7569d4':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(114,190,201,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#77edeb':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,93,147,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#7c0000':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,138,152,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#7e00e5':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(94,204,113,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#806ee5':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(121,237,177,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#8092d3':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(236,114,220,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#84de9f':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(235,143,175,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#88e4b6':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(68,238,162,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#8914cc':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,155,240,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#8b76db':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(236,111,73,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#93e238':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(210,168,42,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#a758c9':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(52,240,240,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#a784de':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(121,222,101,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#aa0096':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(121,222,101,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#ad0000':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(85,221,203,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#afdc54':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(114,203,87,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#b60004':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(22,210,160,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#b8d842':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(152,61,213,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#b924da':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(180,54,225,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#b9dc80':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(240,123,55,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#c743d8':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(211,146,117,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#c87422':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(50,104,227,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#ceed1f':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(50,104,227,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#cf549a':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(145,14,210,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#d376db':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(70,230,75,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#d52828':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(153,103,206,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#d6002a':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,28,183,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#d6687e':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(213,144,94,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#d68b60':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(68,237,104,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#d8dd37':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,96,213,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#d9336a':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(160,84,226,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#d9ff00':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,167,109,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#dab651':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(196,210,105,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#db0000':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(169,239,103,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#dd0000':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(212,36,133,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#de3f13':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(217,141,19,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e07785':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(125,106,233,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e14b16':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,45,85,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e2d756':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(222,175,130,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e66cab':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(233,106,235,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e7149a':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(104,51,202,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e72834':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(73,154,204,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e74646':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(202,187,118,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e77912':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(64,22,215,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e88964':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(198,230,67,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#e911d0':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(102,223,36,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#eb4a4a':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(82,216,225,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#ed6e13':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(126,196,211,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#eea30e':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(224,131,127,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#efa73a':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(236,139,167,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#f00000':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,47,187,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#ff60f8':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(75,212,114,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#ff8300':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(223,210,122,1.0)',
+                interactive: true,
+            }
+                    break;
+                case '#ffff63':
+                    return {
+                pane: 'pane_Secteurscollges_0',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(32,115,231,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Secteurscollges_0');
+        map.getPane('pane_Secteurscollges_0').style.zIndex = 400;
+        map.getPane('pane_Secteurscollges_0').style['mix-blend-mode'] = 'hard-light';
+        var layer_Secteurscollges_0 = new L.geoJson(json_Secteurscollges_0, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Secteurscollges_0',
+            layerName: 'layer_Secteurscollges_0',
+            pane: 'pane_Secteurscollges_0',
+            onEachFeature: pop_Secteurscollges_0,
+            style: style_Secteurscollges_0_0,
+        });
+        bounds_group.addLayer(layer_Secteurscollges_0);
+        map.addLayer(layer_Secteurscollges_0);
+        function pop_Dpartement_Haute_Garonne_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+        }
+
+        function style_Dpartement_Haute_Garonne_1_0() {
+            return {
+                pane: 'pane_Dpartement_Haute_Garonne_1',
+                opacity: 1,
+                color: 'rgba(6,213,240,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        function style_Dpartement_Haute_Garonne_1_1() {
+            return {
+                pane: 'pane_Dpartement_Haute_Garonne_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '10,5',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Dpartement_Haute_Garonne_1');
+        map.getPane('pane_Dpartement_Haute_Garonne_1').style.zIndex = 401;
+        map.getPane('pane_Dpartement_Haute_Garonne_1').style['mix-blend-mode'] = 'normal';
+        var layer_Dpartement_Haute_Garonne_1 = new L.geoJson.multiStyle(json_Dpartement_Haute_Garonne_1, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Dpartement_Haute_Garonne_1',
+            layerName: 'layer_Dpartement_Haute_Garonne_1',
+            pane: 'pane_Dpartement_Haute_Garonne_1',
+            onEachFeature: pop_Dpartement_Haute_Garonne_1,
+            styles: [style_Dpartement_Haute_Garonne_1_0,style_Dpartement_Haute_Garonne_1_1,]
+        });
+        bounds_group.addLayer(layer_Dpartement_Haute_Garonne_1);
+        map.addLayer(layer_Dpartement_Haute_Garonne_1);
+        function pop_Communes_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nom'] !== null ? autolinker.link(feature.properties['nom'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Communes_2_0() {
+            return {
+                pane: 'pane_Communes_2',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Communes_2');
+        map.getPane('pane_Communes_2').style.zIndex = 402;
+        map.getPane('pane_Communes_2').style['mix-blend-mode'] = 'normal';
+        var layer_Communes_2 = new L.geoJson(json_Communes_2, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Communes_2',
+            layerName: 'layer_Communes_2',
+            pane: 'pane_Communes_2',
+            onEachFeature: pop_Communes_2,
+            style: style_Communes_2_0,
+        });
+        bounds_group.addLayer(layer_Communes_2);
+        map.addLayer(layer_Communes_2);
+        function pop_Mtropole_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+        }
+
+        function style_Mtropole_3_0() {
+            return {
+                pane: 'pane_Mtropole_3',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        function style_Mtropole_3_1() {
+            return {
+                pane: 'pane_Mtropole_3',
+                opacity: 1,
+                color: 'rgba(250,0,234,1.0)',
+                dashArray: '10,5',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 3.0, 
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Mtropole_3');
+        map.getPane('pane_Mtropole_3').style.zIndex = 403;
+        map.getPane('pane_Mtropole_3').style['mix-blend-mode'] = 'normal';
+        var layer_Mtropole_3 = new L.geoJson.multiStyle(json_Mtropole_3, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Mtropole_3',
+            layerName: 'layer_Mtropole_3',
+            pane: 'pane_Mtropole_3',
+            onEachFeature: pop_Mtropole_3,
+            styles: [style_Mtropole_3_0,style_Mtropole_3_1,]
+        });
+        bounds_group.addLayer(layer_Mtropole_3);
+        map.addLayer(layer_Mtropole_3);
+        function pop_Toulouse_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['code_insee'] !== null ? autolinker.link(feature.properties['code_insee'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nom_maj'] !== null ? autolinker.link(feature.properties['nom_maj'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['nom_min'] !== null ? autolinker.link(feature.properties['nom_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Toulouse_4_0() {
+            return {
+                pane: 'pane_Toulouse_4',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        function style_Toulouse_4_1() {
+            return {
+                pane: 'pane_Toulouse_4',
+                opacity: 1,
+                color: 'rgba(235,0,0,1.0)',
+                dashArray: '10,5',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fillOpacity: 0,
+                interactive: false,
+            }
+        }
+        map.createPane('pane_Toulouse_4');
+        map.getPane('pane_Toulouse_4').style.zIndex = 404;
+        map.getPane('pane_Toulouse_4').style['mix-blend-mode'] = 'normal';
+        var layer_Toulouse_4 = new L.geoJson.multiStyle(json_Toulouse_4, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_Toulouse_4',
+            layerName: 'layer_Toulouse_4',
+            pane: 'pane_Toulouse_4',
+            onEachFeature: pop_Toulouse_4,
+            styles: [style_Toulouse_4_0,style_Toulouse_4_1,]
+        });
+        bounds_group.addLayer(layer_Toulouse_4);
+        map.addLayer(layer_Toulouse_4);
+        function pop_Collgesprivs_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Collège privé :</strong><br />' + (feature.properties['NOM'] !== null ? autolinker.link(feature.properties['NOM'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Collgesprivs_5_0() {
+            return {
+                pane: 'pane_Collgesprivs_5',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(252,255,34,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(219,30,42,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Collgesprivs_5');
+        map.getPane('pane_Collgesprivs_5').style.zIndex = 405;
+        map.getPane('pane_Collgesprivs_5').style['mix-blend-mode'] = 'normal';
+        var layer_Collgesprivs_5 = new L.geoJson(json_Collgesprivs_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Collgesprivs_5',
+            layerName: 'layer_Collgesprivs_5',
+            pane: 'pane_Collgesprivs_5',
+            onEachFeature: pop_Collgesprivs_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Collgesprivs_5_0(feature));
+            },
+        });
+        var cluster_Collgesprivs_5 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_Collgesprivs_5.addLayer(layer_Collgesprivs_5);
+
+        bounds_group.addLayer(layer_Collgesprivs_5);
+        cluster_Collgesprivs_5.addTo(map);
+        function pop_Collgesprogramms_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Collège programmé :</strong><br />' + (feature.properties['nom'] !== null ? autolinker.link(feature.properties['nom'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Collgesprogramms_6_0() {
+            return {
+                pane: 'pane_Collgesprogramms_6',
+                shape: 'square',
+                radius: 4.4,
+                opacity: 1,
+                color: 'rgba(243,247,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,207,77,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Collgesprogramms_6');
+        map.getPane('pane_Collgesprogramms_6').style.zIndex = 406;
+        map.getPane('pane_Collgesprogramms_6').style['mix-blend-mode'] = 'normal';
+        var layer_Collgesprogramms_6 = new L.geoJson(json_Collgesprogramms_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Collgesprogramms_6',
+            layerName: 'layer_Collgesprogramms_6',
+            pane: 'pane_Collgesprogramms_6',
+            onEachFeature: pop_Collgesprogramms_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_Collgesprogramms_6_0(feature));
+            },
+        });
+        var cluster_Collgesprogramms_6 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_Collgesprogramms_6.addLayer(layer_Collgesprogramms_6);
+
+        bounds_group.addLayer(layer_Collgesprogramms_6);
+        cluster_Collgesprogramms_6.addTo(map);
+        function pop_Collgepublics_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>Collège public :</strong><br />' + (feature.properties['NOM_DEES'] !== null ? autolinker.link(feature.properties['NOM_DEES'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Collgepublics_7_0() {
+            return {
+                pane: 'pane_Collgepublics_7',
+                radius: 6.0,
+                opacity: 1,
+                color: 'rgba(247,235,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(90,23,224,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Collgepublics_7');
+        map.getPane('pane_Collgepublics_7').style.zIndex = 407;
+        map.getPane('pane_Collgepublics_7').style['mix-blend-mode'] = 'normal';
+        var layer_Collgepublics_7 = new L.geoJson(json_Collgepublics_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Collgepublics_7',
+            layerName: 'layer_Collgepublics_7',
+            pane: 'pane_Collgepublics_7',
+            onEachFeature: pop_Collgepublics_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_Collgepublics_7_0(feature));
+            },
+        });
+        var cluster_Collgepublics_7 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_Collgepublics_7.addLayer(layer_Collgepublics_7);
+
+        bounds_group.addLayer(layer_Collgepublics_7);
+        cluster_Collgepublics_7.addTo(map);
+            var title = new L.Control();
+            title.onAdd = function (map) {
+                this._div = L.DomUtil.create('div', 'info');
+                this.update();
+                return this._div;
+            };
+            title.update = function () {
+                this._div.innerHTML = '<h2>Les collèges en Haute-Garonne</h2>';
+            };
+            title.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="legend/Collgepublics_7.png" /> Collège publics': cluster_Collgepublics_7,'<img src="legend/Collgesprogramms_6.png" /> Collèges programmés': cluster_Collgesprogramms_6,'<img src="legend/Collgesprivs_5.png" /> Collèges privés': cluster_Collgesprivs_5,'<img src="legend/Toulouse_4.png" /> Toulouse': layer_Toulouse_4,'<img src="legend/Mtropole_3.png" /> Métropole': layer_Mtropole_3,'<img src="legend/Communes_2.png" /> Communes': layer_Communes_2,'<img src="legend/Dpartement_Haute_Garonne_1.png" /> Département_Haute_Garonne': layer_Dpartement_Haute_Garonne_1,'Secteurs collèges<br /><table><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_0000000.png" /></td><td>#000000</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_0000971.png" /></td><td>#000097</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_001be92.png" /></td><td>#001be9</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_00801b3.png" /></td><td>#00801b</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_008c094.png" /></td><td>#008c09</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_00b8325.png" /></td><td>#00b832</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_0c50ce6.png" /></td><td>#0c50ce</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_0fcda77.png" /></td><td>#0fcda7</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_12e92f8.png" /></td><td>#12e92f</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_1313ab9.png" /></td><td>#1313ab</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_1395c810.png" /></td><td>#1395c8</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_174ed911.png" /></td><td>#174ed9</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_1aec5c12.png" /></td><td>#1aec5c</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_1cdfe913.png" /></td><td>#1cdfe9</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_1e00d814.png" /></td><td>#1e00d8</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_1ea29115.png" /></td><td>#1ea291</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_208e2b16.png" /></td><td>#208e2b</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_2135ec17.png" /></td><td>#2135ec</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_2241da18.png" /></td><td>#2241da</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_30583219.png" /></td><td>#305832</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_31d04f20.png" /></td><td>#31d04f</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_32a4e121.png" /></td><td>#32a4e1</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_37d2e322.png" /></td><td>#37d2e3</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_3dac8023.png" /></td><td>#3dac80</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_42424224.png" /></td><td>#424242</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_43da2f25.png" /></td><td>#43da2f</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_46886a26.png" /></td><td>#46886a</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_4be7c027.png" /></td><td>#4be7c0</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_4e742b28.png" /></td><td>#4e742b</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_58e10f29.png" /></td><td>#58e10f</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_63683030.png" /></td><td>#636830</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_64646431.png" /></td><td>#646464</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_66b8c832.png" /></td><td>#66b8c8</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_675dd133.png" /></td><td>#675dd1</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_6ade6c34.png" /></td><td>#6ade6c</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_6d241e35.png" /></td><td>#6d241e</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_6e72ed36.png" /></td><td>#6e72ed</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_70ce7737.png" /></td><td>#70ce77</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_71717138.png" /></td><td>#717171</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_7569d439.png" /></td><td>#7569d4</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_77edeb40.png" /></td><td>#77edeb</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_7c000041.png" /></td><td>#7c0000</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_7e00e542.png" /></td><td>#7e00e5</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_806ee543.png" /></td><td>#806ee5</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_8092d344.png" /></td><td>#8092d3</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_84de9f45.png" /></td><td>#84de9f</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_88e4b646.png" /></td><td>#88e4b6</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_8914cc47.png" /></td><td>#8914cc</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_8b76db48.png" /></td><td>#8b76db</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_93e23849.png" /></td><td>#93e238</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_a758c950.png" /></td><td>#a758c9</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_a784de51.png" /></td><td>#a784de</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_aa009652.png" /></td><td>#aa0096</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_ad000053.png" /></td><td>#ad0000</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_afdc5454.png" /></td><td>#afdc54</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_b6000455.png" /></td><td>#b60004</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_b8d84256.png" /></td><td>#b8d842</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_b924da57.png" /></td><td>#b924da</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_b9dc8058.png" /></td><td>#b9dc80</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_c743d859.png" /></td><td>#c743d8</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_c8742260.png" /></td><td>#c87422</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_ceed1f61.png" /></td><td>#ceed1f</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_cf549a62.png" /></td><td>#cf549a</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_d376db63.png" /></td><td>#d376db</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_d5282864.png" /></td><td>#d52828</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_d6002a65.png" /></td><td>#d6002a</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_d6687e66.png" /></td><td>#d6687e</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_d68b6067.png" /></td><td>#d68b60</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_d8dd3768.png" /></td><td>#d8dd37</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_d9336a69.png" /></td><td>#d9336a</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_d9ff0070.png" /></td><td>#d9ff00</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_dab65171.png" /></td><td>#dab651</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_db000072.png" /></td><td>#db0000</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_dd000073.png" /></td><td>#dd0000</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_de3f1374.png" /></td><td>#de3f13</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e0778575.png" /></td><td>#e07785</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e14b1676.png" /></td><td>#e14b16</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e2d75677.png" /></td><td>#e2d756</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e66cab78.png" /></td><td>#e66cab</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e7149a79.png" /></td><td>#e7149a</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e7283480.png" /></td><td>#e72834</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e7464681.png" /></td><td>#e74646</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e7791282.png" /></td><td>#e77912</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e8896483.png" /></td><td>#e88964</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_e911d084.png" /></td><td>#e911d0</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_eb4a4a85.png" /></td><td>#eb4a4a</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_ed6e1386.png" /></td><td>#ed6e13</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_eea30e87.png" /></td><td>#eea30e</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_efa73a88.png" /></td><td>#efa73a</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_f0000089.png" /></td><td>#f00000</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_ff60f890.png" /></td><td>#ff60f8</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_ff830091.png" /></td><td>#ff8300</td></tr><tr><td style="text-align: center;"><img src="legend/Secteurscollges_0_ffff6392.png" /></td><td>#ffff63</td></tr></table>': layer_Secteurscollges_0,}).addTo(map);
+        map.on("zoomend", function(){
+
+                if (map.hasLayer(layer_Collgesprivs_5)) {
+                    if (map.getZoom() <= 12 && map.getZoom() >= 19) {
+                        layer_Collgesprivs_5.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_Collgesprivs_5.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+                if (map.hasLayer(layer_Collgesprogramms_6)) {
+                    if (map.getZoom() <= 12 && map.getZoom() >= 19) {
+                        layer_Collgesprogramms_6.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_Collgesprogramms_6.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+                if (map.hasLayer(layer_Collgepublics_7)) {
+                    if (map.getZoom() <= 12 && map.getZoom() >= 19) {
+                        layer_Collgepublics_7.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_Collgepublics_7.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+        });
+        setBounds();
+        var i = 0;
+        layer_Collgesprivs_5.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['NOM'] !== null?String('<div style="color: #000000; font-size: 8pt; font-weight: bold; font-family: \'MS Shell Dlg 2\', sans-serif;">' + layer.feature.properties['NOM']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Collgesprivs_5'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Collgesprogramms_6.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['nom'] !== null?String('<div style="color: #000000; font-size: 10pt; font-weight: bold; font-family: \'MS Shell Dlg 2\', sans-serif;">' + layer.feature.properties['nom']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Collgesprogramms_6'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        var i = 0;
+        layer_Collgepublics_7.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['NOM_DEES'] !== null?String('<div style="color: #000000; font-size: 10pt; font-weight: bold; font-family: \'MS Shell Dlg 2\', sans-serif;">' + layer.feature.properties['NOM_DEES']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Collgepublics_7'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+                if (map.hasLayer(layer_Collgesprivs_5)) {
+                    if (map.getZoom() <= 12 && map.getZoom() >= 19) {
+                        layer_Collgesprivs_5.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_Collgesprivs_5.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+                if (map.hasLayer(layer_Collgesprogramms_6)) {
+                    if (map.getZoom() <= 12 && map.getZoom() >= 19) {
+                        layer_Collgesprogramms_6.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_Collgesprogramms_6.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+                if (map.hasLayer(layer_Collgepublics_7)) {
+                    if (map.getZoom() <= 12 && map.getZoom() >= 19) {
+                        layer_Collgepublics_7.eachLayer(function (layer) {
+                            layer.openTooltip();
+                        });
+                    } else {
+                        layer_Collgepublics_7.eachLayer(function (layer) {
+                            layer.closeTooltip();
+                        });
+                    }
+                }
+        map.addControl(new L.Control.Search({
+            layer: cluster_Secteurscollges_0,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'nom'}));
+        document.getElementsByClassName('search-button')[0].className +=
+         ' fa fa-binoculars';
+        resetLabels([layer_Communes_2,layer_Collgesprivs_5,layer_Collgesprogramms_6,layer_Collgepublics_7]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Communes_2,layer_Collgesprivs_5,layer_Collgesprogramms_6,layer_Collgepublics_7]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Communes_2,layer_Collgesprivs_5,layer_Collgesprogramms_6,layer_Collgepublics_7]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Communes_2,layer_Collgesprivs_5,layer_Collgesprogramms_6,layer_Collgepublics_7]);
+        });
+        </script>
+    </body>
+</html>
